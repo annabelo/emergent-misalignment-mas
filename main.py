@@ -151,12 +151,19 @@ for timestep in range(1, world["deadline"] + 1):
 
 # print the action log 
 print("\n--- Action Log ---")
+print(f"{'Hour':<6} | {'Agent':<25} | {'Action':<50} | {'Locally Rational'}")
+print("-" * 100)
 for action in world["action_log"]:
-    ## print(f"[{action['time']}] {action['agent']}: {action['action']}")
-    print(action)
+    
+    print(
+        f"{action['time']:<6} | "
+        f"{action['agent']:<25} | "
+        f"{action['action']:<50} | "
+        f"{action['locally_rational']}"
+    )
 
 
-# check if global objectife function is satisfied
+# check if global objective function is satisfied
 print("\n--- Global Objective Check ---")
 
 global_objective_satisfied = world["session"]["is_completed"] and world["time"] <= world["deadline"]
