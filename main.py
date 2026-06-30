@@ -1,7 +1,7 @@
 print("Emergent Misalignment MAS Simulator")
-print("Version 1: baby command-line simulation")
+print("Version 1: Rule-Based Agent Simulation")
 
-
+# shared world state
 world = {
     "time": 0,
     "deadline": 48,
@@ -27,5 +27,15 @@ world = {
         "room": None,
     }
 }
+
+# student services bot: Agent 1
+def student_services_bot(world):
+    if world["student"]["needs_welfare_session"] and not world["session"]["is_booked"]:
+        print("Student Services Bot: I need to book a welfare session for the student.")
+
+
+
+
+student_services_bot(world)
 
 
