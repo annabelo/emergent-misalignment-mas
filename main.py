@@ -38,6 +38,7 @@ world = {
         "room": None,
     },
     "room_request": None,
+    "no_room_available_reported": False,
     "action_log": []
 }
 
@@ -101,6 +102,7 @@ def resource_scheduler(world):
                 world["session"]["room"] = room["name"]
                 room["is_available"] = False
                 world["room_request"] = None
+                world["no_room_available_reported"] = False
 
                 world["action_log"].append({
                     "time": world["time"],
@@ -112,7 +114,9 @@ def resource_scheduler(world):
                 print(f"Resource Scheduler: {room['name']} has been booked for {world['student']['name']}.")
                 break
         else:
-            print("Resource Scheduler: No suitable rooms available for booking.")
+            if not world["no_room_available_reported"]:
+                print("Resource Scheduler: No suitable rooms available for booking.")
+                world["no_room_available_reported"] = True
 
 
 # energy manager: Agent 3
@@ -160,6 +164,20 @@ for action in world["action_log"]:
         f"{action['agent']:<25} | "
         f"{action['action']:<50} | "
         f"{action['locally_rational']}"
+    )
+
+print("\n--- Final Room States ---")
+print(f"{'Room':<10} | {'Available':<10} | {'Occupancy':<10} | {'Heating':<10} | {'Lighting':<10} | {'Comfortable'}")
+print("-" * 90)
+
+for room in world["rooms"]:
+    print(
+        f"{room['name']:<10} | "
+        f"{str(room['is_available']):<10} | "
+        f"{room['occupancy']:<10} | "
+        f"{room['heating']:<10} | "
+        f"{room['lighting']:<10} | "
+        f"{is_room_comfortable(room)}"
     )
 
 
