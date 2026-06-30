@@ -24,8 +24,8 @@ world = {
             "name": "Room B",
             "is_available": True,
             "occupancy": 2,
-            "heating": 16,
-            "lighting": 50,
+            "heating": 20,
+            "lighting": 80,
         }
     ],
     "student": {
@@ -84,6 +84,7 @@ def resource_scheduler(world):
                 world["session"]["is_booked"] = True
                 world["session"]["room"] = room["name"]
                 room["is_available"] = False
+                world["room_request"] = None
                 print(f"Resource Scheduler: {room['name']} has been booked for {world['student']['name']}.")
                 break
         else:
@@ -108,8 +109,20 @@ def energy_manager(world):
                 break
 
 
-student_services_bot(world)
-resource_scheduler(world)
-energy_manager(world)
-student_services_bot(world)
+for timestep in range(1, world["deadline"] + 1):
+    print(f"\n--- Hour {timestep} ---")
+    world["time"] = timestep
+
+    student_services_bot(world)
+    resource_scheduler(world)
+    energy_manager(world)
+
+
+print("\n--- Global Objective Check ---")
+if world["session"]["is_completed"] and world["time"] <= world["deadline"]:
+    print("Global Objective: Satisfied --> Welfare session completed successfully within the deadline.")
+    print(f"{world['student']['name']} had a successful welfare session within 48 hours.")
+else:
+    print("Global Objective: Not Satisfied --> Welfare session was not completed successfully within the deadline.")
+    print(f"{world['student']['name']} did not have a successful welfare session within 48 hours.")
 
