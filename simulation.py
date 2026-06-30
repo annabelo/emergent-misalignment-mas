@@ -2,6 +2,7 @@ from agents import (
     student_services_bot,
     resource_scheduler,
     energy_manager,
+    is_room_comfortable,
 )
 
 def run_simulation(world):
@@ -25,3 +26,18 @@ def run_simulation(world):
             f"{action['action']:<50} | "
             f"{action['locally_rational']}"
         )
+    
+    print("\n--- Final Room States ---")
+    print(f"{'Room':<10} | {'Available':<10} | {'Occupancy':<10} | {'Heating':<10} | {'Lighting':<10} | {'Comfortable'}")
+    print("-" * 90)
+
+    for room in world["rooms"]:
+        print(
+            f"{room['name']:<10} | "
+            f"{str(room['is_available']):<10} | "
+            f"{room['occupancy']:<10} | "
+            f"{room['heating']:<10} | "
+            f"{room['lighting']:<10} | "
+            f"{is_room_comfortable(room)}"
+        )
+    
