@@ -44,6 +44,11 @@ world = {
 def is_room_comfortable(room):
     return room["heating"] >= MIN_COMFORTABLE_HEATING and room["lighting"] >= MIN_COMFORTABLE_LIGHTING
 
+def find_room_by_name(world, room_name):
+    for room in world["rooms"]:
+        if room["name"] == room_name:
+            return room
+    return None
 
 # student services bot: Agent 1
 def student_services_bot(world):
@@ -54,6 +59,21 @@ def student_services_bot(world):
             "urgency": "high",
         }
         print(f"Student Services Bot: I need to book a welfare session for {world['student']['name']}. Requesting a room.")
+
+    elif world["session"]["is_booked"]:
+        booked_room = find_room_by_name(world, world["session"]["room"])
+
+        if booked_room is not None and not is_room_comfortable(booked_room):
+            print(f"Student Services Bot: The booked room {booked_room['name']} is not comfortable for the welfare session.")
+            print("Student Services Bot: Requesting a new room due to discomfort.")
+            world["room_request"] = {
+                "student": world["student"]["name"],
+                "purpose": "welfare_session",
+                "urgency": "high",
+            }
+            world["session"]["is_booked"] = False
+            world["session"]["room"] = None
+            booked_room["is_available"] = True
 
 
 # resource scheduler: Agent 2
@@ -91,3 +111,5 @@ def energy_manager(world):
 student_services_bot(world)
 resource_scheduler(world)
 energy_manager(world)
+student_services_bot(world)
+
