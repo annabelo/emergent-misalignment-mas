@@ -71,4 +71,14 @@ This is a later extension. The first priority is to make the rule-based model cl
 
 ## Current Status
 
-The project currently contains an early command-line prototype with basic room data, room suitability checks, a Student Services Bot booking step, and an Energy Manager comfort reduction step.
+Version 1 currently implements a command-line prototype of Scenario A.
+
+The simulation includes:
+- a shared world state
+- three rule-based agents
+- numerical room comfort conditions
+- a 48-hour timestep loop
+- an action trace table
+- final room state summary
+- global objective evaluation
+- emergent misalignment detection
