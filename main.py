@@ -149,6 +149,13 @@ for timestep in range(1, world["deadline"] + 1):
     energy_manager(world)
 
 
+# print the action log 
+print("\n--- Action Log ---")
+for action in world["action_log"]:
+    ## print(f"[{action['time']}] {action['agent']}: {action['action']}")
+    print(action)
+
+
 # check if global objectife function is satisfied
 print("\n--- Global Objective Check ---")
 
