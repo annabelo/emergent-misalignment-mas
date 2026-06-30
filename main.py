@@ -1,4 +1,5 @@
 from scenario_a import create_scenario_a_world
+
 from simulation import run_simulation
 
 print("Emergent Misalignment MAS Simulator")
