@@ -5,22 +5,14 @@ from agents import (
     energy_manager,
     is_room_comfortable,
 )
+from simulation import run_simulation
 
 print("Emergent Misalignment MAS Simulator")
 print("Version 1: Rule-Based Agent Simulation")
 print("-----------------------------------------")
 
 world = create_scenario_a_world()
-
-
-for timestep in range(1, world["deadline"] + 1):
-    print(f"\n--- Hour {timestep} ---")
-    world["time"] = timestep
-
-    student_services_bot(world)
-    resource_scheduler(world)
-    energy_manager(world)
-
+run_simulation(world)
 
 # print the action log 
 print("\n--- Action Log ---")
