@@ -1,10 +1,5 @@
 from scenario_a import create_scenario_a_world
-from agents import (
-    student_services_bot,
-    resource_scheduler,
-    energy_manager,
-    is_room_comfortable,
-)
+from agents import is_room_comfortable
 from simulation import run_simulation
 
 print("Emergent Misalignment MAS Simulator")
@@ -14,18 +9,7 @@ print("-----------------------------------------")
 world = create_scenario_a_world()
 run_simulation(world)
 
-# print the action log 
-print("\n--- Action Log ---")
-print(f"{'Hour':<6} | {'Agent':<25} | {'Action':<50} | {'Locally Rational'}")
-print("-" * 100)
-for action in world["action_log"]:
-    
-    print(
-        f"{action['time']:<6} | "
-        f"{action['agent']:<25} | "
-        f"{action['action']:<50} | "
-        f"{action['locally_rational']}"
-    )
+
 
 print("\n--- Final Room States ---")
 print(f"{'Room':<10} | {'Available':<10} | {'Occupancy':<10} | {'Heating':<10} | {'Lighting':<10} | {'Comfortable'}")
