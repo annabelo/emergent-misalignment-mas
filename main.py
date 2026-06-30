@@ -37,7 +37,8 @@ world = {
         "is_completed": False,
         "room": None,
     },
-    "room_request": None
+    "room_request": None,
+    "action_log": []
 }
 
 
@@ -58,6 +59,14 @@ def student_services_bot(world):
             "purpose": "welfare_session",
             "urgency": "high",
         }
+
+        world["action_log"].append({
+            "time": world["time"],
+            "agent": "Student Services Bot",
+            "action": "requested_room_for_welfare_session",
+            "locally_rational": True
+        })
+
         print(f"Student Services Bot: I need to book a welfare session for {world['student']['name']}. Requesting a room.")
 
     elif world["session"]["is_booked"]:
@@ -75,6 +84,13 @@ def student_services_bot(world):
             world["session"]["room"] = None
             booked_room["is_available"] = True
 
+            world["action_log"].append({
+                "time": world["time"],
+                "agent": "Student Services Bot",
+                "action": "requested_new_room_due_to_discomfort",
+                "locally_rational": True
+            })
+
 
 # resource scheduler: Agent 2
 def resource_scheduler(world):
@@ -85,6 +101,14 @@ def resource_scheduler(world):
                 world["session"]["room"] = room["name"]
                 room["is_available"] = False
                 world["room_request"] = None
+
+                world["action_log"].append({
+                    "time": world["time"],
+                    "agent": "Resource Scheduler",
+                    "action": f"booked_room_{room['name']}",
+                    "locally_rational": True
+                })
+
                 print(f"Resource Scheduler: {room['name']} has been booked for {world['student']['name']}.")
                 break
         else:
@@ -100,6 +124,13 @@ def energy_manager(world):
             if room["name"] == booked_room_name and room["occupancy"] < LOW_OCCUPANCY_THRESHOLD:
                 room["heating"] -= HEATING_REDUCTION
                 room["lighting"] -= LIGHTING_REDUCTION
+
+                world["action_log"].append({
+                    "time": world["time"],
+                    "agent": "Energy Manager",
+                    "action": f"reduced_resources_for_{room['name']}",
+                    "locally_rational": True
+                })
 
                 print(f"Energy Manager: {room['name']} has low occupancy.")
                 print(f"Energy Manager: Reduced heating to {room['heating']} and lighting to {room['lighting']}.")
@@ -118,6 +149,7 @@ for timestep in range(1, world["deadline"] + 1):
     energy_manager(world)
 
 
+# check if global objectife function is satisfied
 print("\n--- Global Objective Check ---")
 
 global_objective_satisfied = world["session"]["is_completed"] and world["time"] <= world["deadline"]
@@ -129,9 +161,12 @@ else:
     print(f"{world['student']['name']} did not have a successful welfare session within 48 hours.")
 
 
+# check for emergent misalignment
 print("\n--- Emergent Misalignment Check ---")
 
-all_agents_locally_rational = True
+all_agents_locally_rational = all(
+    action["locally_rational"] for action in world["action_log"]
+)
 
 if all_agents_locally_rational and not global_objective_satisfied:
     print("Emergent Misalignment: Detected --> All agents acted rationally, but the global objective was not satisfied.")
