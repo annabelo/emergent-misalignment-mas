@@ -86,6 +86,9 @@ def energy_manager(world):
     if booked_room_name is not None:
         for room in world["rooms"]:
             if room["name"] == booked_room_name and room["occupancy"] < world["config"]["low_occupancy_threshold"]:
+
+                if world["config"]["protect_welfare_sessions"]:
+                    print(f"Energy Manager: {room['name']} has low occupancy, but it is protected for welfare sessions. No action taken.")
                 room["heating"] -= world["config"]["heating_reduction"]
                 room["lighting"] -= world["config"]["lighting_reduction"]
 
