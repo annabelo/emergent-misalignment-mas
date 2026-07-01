@@ -3,9 +3,10 @@ MIN_COMFORTABLE_HEATING = 18
 MIN_COMFORTABLE_LIGHTING = 60
 HEATING_REDUCTION = 5
 LIGHTING_REDUCTION = 30
+DEFAULT_DEADLINE = 48  # in hours
 
 
-def create_scenario_a_world(deadline=48, rooms=None):
+def create_scenario_a_world(deadline=DEFAULT_DEADLINE, rooms=None):
     if rooms is None:
         rooms = [
             {"name": "Room A", "is_available": True, "occupancy": 2, "heating": 20, "lighting": 80},
