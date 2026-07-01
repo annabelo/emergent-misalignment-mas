@@ -8,3 +8,4 @@ print("-----------------------------------------")
 
 world = create_scenario_a_world()
 run_simulation(world)
+

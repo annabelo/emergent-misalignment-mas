@@ -6,8 +6,12 @@ from scenario_a import (
     LIGHTING_REDUCTION,
 )
 
-def is_room_comfortable(room):
-    return room["heating"] >= MIN_COMFORTABLE_HEATING and room["lighting"] >= MIN_COMFORTABLE_LIGHTING
+def is_room_comfortable(world, room):
+    return( 
+        room["heating"] >= world["config"]["min_comfortable_heating"] 
+        and room["lighting"] >= world["config"]["min_comfortable_lighting"]
+    )
+
 
 def find_room_by_name(world, room_name):
     for room in world["rooms"]:
@@ -36,7 +40,7 @@ def student_services_bot(world):
     elif world["session"]["is_booked"]:
         booked_room = find_room_by_name(world, world["session"]["room"])
 
-        if booked_room is not None and not is_room_comfortable(booked_room):
+        if booked_room is not None and not is_room_comfortable(world, booked_room):
             print(f"Student Services Bot: The booked room {booked_room['name']} is not comfortable for the welfare session.")
             print("Student Services Bot: Requesting a new room due to discomfort.")
             world["room_request"] = {
@@ -60,7 +64,7 @@ def student_services_bot(world):
 def resource_scheduler(world):
     if world["room_request"] is not None and not world["session"]["is_booked"]:
         for room in world["rooms"]:
-            if room["is_available"] and is_room_comfortable(room):
+            if room["is_available"] and is_room_comfortable(world, room):
                 world["session"]["is_booked"] = True
                 world["session"]["room"] = room["name"]
                 room["is_available"] = False
@@ -88,9 +92,9 @@ def energy_manager(world):
 
     if booked_room_name is not None:
         for room in world["rooms"]:
-            if room["name"] == booked_room_name and room["occupancy"] < LOW_OCCUPANCY_THRESHOLD:
-                room["heating"] -= HEATING_REDUCTION
-                room["lighting"] -= LIGHTING_REDUCTION
+            if room["name"] == booked_room_name and room["occupancy"] < world["config"]["low_occupancy_threshold"]:
+                room["heating"] -= world["config"]["heating_reduction"]
+                room["lighting"] -= world["config"]["lighting_reduction"]
 
                 world["action_log"].append({
                     "time": world["time"],
@@ -102,6 +106,6 @@ def energy_manager(world):
                 print(f"Energy Manager: {room['name']} has low occupancy.")
                 print(f"Energy Manager: Reduced heating to {room['heating']} and lighting to {room['lighting']}.")
 
-                if not is_room_comfortable(room):
+                if not is_room_comfortable(world, room):
                     print(f"System: {room['name']} is now unsuitable for the welfare session.")
                 break

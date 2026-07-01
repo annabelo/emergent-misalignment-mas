@@ -38,7 +38,7 @@ def run_simulation(world):
             f"{room['occupancy']:<10} | "
             f"{room['heating']:<10} | "
             f"{room['lighting']:<10} | "
-            f"{is_room_comfortable(room)}"
+            f"{is_room_comfortable(world, room)}"
         )
     
     # check if global objective function is satisfied
