@@ -1,10 +1,3 @@
-from scenario_a import (
-    LOW_OCCUPANCY_THRESHOLD,
-    MIN_COMFORTABLE_HEATING,
-    MIN_COMFORTABLE_LIGHTING,
-    HEATING_REDUCTION,
-    LIGHTING_REDUCTION,
-)
 
 def is_room_comfortable(world, room):
     return( 
