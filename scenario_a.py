@@ -25,7 +25,6 @@ def create_scenario_a_world(deadline=DEFAULT_DEADLINE, rooms=None, student_name=
             "min_comfortable_lighting": MIN_COMFORTABLE_LIGHTING,
             "heating_reduction": HEATING_REDUCTION,
             "lighting_reduction": LIGHTING_REDUCTION,
-            "protect_welfare_sessions": False,
         },
         "rooms": rooms,
         "student": {"name": student_name, "needs_welfare_session": True},
